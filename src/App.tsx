@@ -1,9 +1,9 @@
 import { useState } from "react"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
-import { Home } from "./pages/home/home"
-import { Navbar } from "./components/navbar"
+import Home from "./pages/home/home"
+import Navbar from "./components/navbar"
 import Login from "./pages/login/login"
-import { PrivateRoute } from "./utils/PrivateRoute"
+import PrivateRoute from "./utils/PrivateRoute"
 
 function App() {
   return (

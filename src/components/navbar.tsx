@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 
-export const Navbar = () => {
+const Navbar = () => {
   return (
     <div className="flex flex-row">
       <div className="basis-1/4 bg-blue-500">01</div>
@@ -18,3 +18,5 @@ export const Navbar = () => {
     </div>
   )
 }
+
+export default Navbar

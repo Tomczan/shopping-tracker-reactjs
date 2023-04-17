@@ -4,7 +4,7 @@ export type PrivateRouteProps = {
   children: JSX.Element
 }
 
-export const PrivateRoute = ({ children }: PrivateRouteProps) => {
+const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const isAuthenticated = false
 
   if (!isAuthenticated) {
@@ -13,3 +13,5 @@ export const PrivateRoute = ({ children }: PrivateRouteProps) => {
 
   return children
 }
+
+export default PrivateRoute
