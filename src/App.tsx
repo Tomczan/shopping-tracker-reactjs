@@ -11,7 +11,10 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path="/" element={<PrivateRoute outlet={<Home />} />}></Route>
+          <Route
+            path="/"
+            element={<PrivateRoute children={<Home />} />}
+          ></Route>
           <Route path="/login/" element={<Login />}></Route>
         </Routes>
       </BrowserRouter>
