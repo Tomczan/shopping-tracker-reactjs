@@ -5,7 +5,7 @@ export type PrivateRouteProps = {
 }
 
 const PrivateRoute = ({ children }: PrivateRouteProps) => {
-  const isAuthenticated = false
+  const isAuthenticated = true
 
   if (!isAuthenticated) {
     return <Navigate to={"/login"} />
