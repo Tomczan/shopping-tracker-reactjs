@@ -2,7 +2,7 @@ import { useContext } from "react"
 import { AuthContext } from "../../context/AuthContext"
 
 const Home = () => {
-  let { username } = useContext(AuthContext)
+  let { username } = useContext(AuthContext) ?? {}
 
   return (
     <>
@@ -10,6 +10,7 @@ const Home = () => {
         Home page
       </h1>
       <p>username: {username}</p>
+      {/* <pre>{JSON.stringify(authContext, null, 2)}</pre> */}
     </>
   )
 }
