@@ -4,15 +4,13 @@ import Home from "./pages/home/home"
 import Navbar from "./components/navbar"
 import Login from "./pages/login/login"
 import PrivateRoute from "./utils/PrivateRoute"
-import { AuthContext } from "./context/AuthContext"
+import { AuthContext, AuthProvider } from "./context/AuthContext"
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <AuthContext.Provider
-          value={{ isAuthenticated: false, username: "Tomek" }}
-        >
+        <AuthProvider>
           <Navbar />
           <Routes>
             <Route
@@ -21,7 +19,7 @@ function App() {
             ></Route>
             <Route path="/login/" element={<Login />}></Route>
           </Routes>
-        </AuthContext.Provider>
+        </AuthProvider>
       </BrowserRouter>
     </div>
   )
