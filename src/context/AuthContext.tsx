@@ -1,8 +1,14 @@
 import { createContext, useState, useEffect } from "react"
+import jwt_decode from "jwt-decode"
+
+type AuthTokensType = {
+  refresh: string
+  access: string
+}
 
 type AuthContextType = {
   username: string | null
-  authToken: string | null
+  authToken: AuthTokensType | null
   loginUser: (e: React.FormEvent<HTMLFormElement>) => Promise<void>
 }
 
@@ -14,7 +20,7 @@ type AuthProviderProps = {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [storedUsername, setUsername] = useState<string | null>(null)
-  const [storedAuthToken, setAuthToken] = useState<string | null>(null)
+  const [storedAuthToken, setAuthToken] = useState<AuthTokensType | null>(null)
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -35,8 +41,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       },
       body: JSON.stringify({ username: login, password: password }),
     })
-    let data = await response.json()
-    console.log(data)
+
+    if (response.status === 200) {
+      let data = await response.json()
+      let decodedData: any = jwt_decode(data.access)
+      setAuthToken(data)
+      setUsername(decodedData.name)
+    } else {
+      alert("Something went wrong!")
+    }
   }
 
   let contextData = {
