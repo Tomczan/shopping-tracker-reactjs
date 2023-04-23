@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react"
 import jwt_decode from "jwt-decode"
+import { useNavigate } from "react-router-dom"
 
 type AuthTokensType = {
   refresh: string
@@ -12,15 +13,33 @@ type AuthContextType = {
   loginUser: (e: React.FormEvent<HTMLFormElement>) => Promise<void>
 }
 
-export const AuthContext = createContext<AuthContextType | null>(null)
-
 type AuthProviderProps = {
   children: React.ReactNode
 }
 
+export const AuthContext = createContext<AuthContextType | null>(null)
+
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [storedUsername, setUsername] = useState<string | null>(null)
-  const [storedAuthToken, setAuthToken] = useState<AuthTokensType | null>(null)
+  const navigate = useNavigate()
+
+  const getDecodedUsername = (accessToken: string): string => {
+    let decodedData: any = jwt_decode(accessToken)
+    return decodedData.name
+  }
+
+  let localStorageTokens = localStorage.getItem("authTokens")
+  let parsedLocalStorageTokens: AuthTokensType = localStorageTokens
+    ? JSON.parse(localStorageTokens)
+    : null
+
+  const [storedUsername, setUsername] = useState<string | null>(() =>
+    parsedLocalStorageTokens
+      ? getDecodedUsername(parsedLocalStorageTokens.access)
+      : null
+  )
+  const [storedAuthToken, setAuthToken] = useState<AuthTokensType | null>(() =>
+    parsedLocalStorageTokens ? parsedLocalStorageTokens : null
+  )
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -44,9 +63,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     if (response.status === 200) {
       let data = await response.json()
-      let decodedData: any = jwt_decode(data.access)
       setAuthToken(data)
-      setUsername(decodedData.name)
+      setUsername(getDecodedUsername(data.access))
+      localStorage.setItem("authTokens", JSON.stringify(data))
+      navigate(-1)
     } else {
       alert("Something went wrong!")
     }
