@@ -11,6 +11,7 @@ type AuthContextType = {
   username: string | null
   authToken: AuthTokensType | null
   loginUser: (e: React.FormEvent<HTMLFormElement>) => Promise<void>
+  logoutUser: () => void
 }
 
 type AuthProviderProps = {
@@ -41,7 +42,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     parsedLocalStorageTokens ? parsedLocalStorageTokens : null
   )
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const loginUser = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const login = e.currentTarget.elements.namedItem(
       "username"
@@ -72,10 +73,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }
 
+  const logoutUser = () => {
+    setAuthToken(null)
+    setUsername(null)
+    localStorage.removeItem("AuthTokens")
+    navigate("/login")
+  }
+
   let contextData = {
     username: storedUsername,
     authToken: storedAuthToken,
-    loginUser: handleLogin,
+    loginUser: loginUser,
+    logoutUser: logoutUser,
   }
 
   return (
