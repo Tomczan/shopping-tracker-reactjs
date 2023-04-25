@@ -2,7 +2,7 @@ import { createContext, useState, useEffect } from "react"
 import jwt_decode from "jwt-decode"
 import { useNavigate } from "react-router-dom"
 
-type AuthTokensType = {
+export type AuthTokensType = {
   refresh: string
   access: string
 }
@@ -34,12 +34,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     : null
 
   const [storedUsername, setUsername] = useState<string | null>(() =>
-    parsedLocalStorageTokens
-      ? getDecodedUsername(parsedLocalStorageTokens.access)
-      : null
+    getDecodedUsername(parsedLocalStorageTokens.access)
   )
-  const [storedAuthToken, setAuthToken] = useState<AuthTokensType | null>(() =>
-    parsedLocalStorageTokens ? parsedLocalStorageTokens : null
+  const [storedAuthToken, setAuthToken] = useState<AuthTokensType | null>(
+    () => parsedLocalStorageTokens
   )
 
   const loginUser = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -80,25 +78,25 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     navigate("/login")
   }
 
-  const updateToken = async () => {
-    console.log("Update token called")
-    let response = await fetch("http://127.0.0.1:8000/api/token/refresh/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ refresh: storedAuthToken?.refresh }),
-    })
+  // const updateToken = async () => {
+  //   console.log("Update token called")
+  //   let response = await fetch("http://127.0.0.1:8000/api/token/refresh/", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ refresh: storedAuthToken?.refresh }),
+  //   })
 
-    if (response.status === 200) {
-      let data = await response.json()
-      setAuthToken(data)
-      setUsername(getDecodedUsername(data.access))
-      localStorage.setItem("authTokens", JSON.stringify(data))
-    } else {
-      logoutUser()
-    }
-  }
+  //   if (response.status === 200) {
+  //     let data = await response.json()
+  //     setAuthToken(data)
+  //     setUsername(getDecodedUsername(data.access))
+  //     localStorage.setItem("authTokens", JSON.stringify(data))
+  //   } else {
+  //     logoutUser()
+  //   }
+  // }
 
   let contextData = {
     username: storedUsername,
@@ -107,14 +105,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     logoutUser: logoutUser,
   }
 
-  useEffect(() => {
-    let interval = setInterval(() => {
-      if (storedAuthToken) {
-        updateToken()
-      }
-    }, 4 * 60 * 1000)
-    return () => clearInterval(interval)
-  }, [storedAuthToken])
+  // useEffect(() => {
+  //   }, [])
 
   return (
     <AuthContext.Provider value={{ ...contextData }}>
