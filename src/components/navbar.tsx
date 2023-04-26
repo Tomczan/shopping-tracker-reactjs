@@ -6,23 +6,22 @@ const Navbar = () => {
   let authContext = useContext(AuthContext)
 
   return (
-    <div className="flex flex-row">
-      <div className="basis-1/4 bg-blue-500">01</div>
-      <div className="basis-1/2 bg-green-500">02</div>
-      <div className="basis-1/4 bg-blue-600 flex flex-row">
-        <p className="basis-1/4">
-          <Link to="/">Home</Link>
-        </p>
-        <p className="basis-1/4">
-          <Link to="/login/">Login</Link>
+    <div className="flex flex-row bg-blue-500 shadow-md text-white w-screen h-8 items-center">
+      <div className="basis-1/4 ml-4 ">
+        <Link to="/">Home</Link>
+      </div>
+      <div className="basis-1/2 ">Option 2</div>
+      <div className="basis-1/4 flex flex-row">
+        <p className="basis-1/4">1</p>
+        <div className="basis-1/4">2</div>
+        <p className="basis-1/4">3</p>
+        <p className="basis-1/4 mr-4">
           {authContext?.authToken ? (
-            <span>Zalogowany</span>
+            <p onClick={authContext.logoutUser}>Logout</p>
           ) : (
-            <span>Niezalogowany</span>
+            <Link to="/login/">Login</Link>
           )}
         </p>
-        <p className="basis-1/4">3</p>
-        <p className="basis-1/4">4</p>
       </div>
     </div>
   )
