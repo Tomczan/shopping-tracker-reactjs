@@ -7,8 +7,7 @@ export type PrivateRouteProps = {
 }
 
 const PrivateRoute = ({ children }: PrivateRouteProps) => {
-  let authContext = useContext(AuthContext)
-  const isAuthenticated = authContext?.authToken ? true : false
+  let { isAuthenticated } = useContext(AuthContext)
   console.log(isAuthenticated)
 
   if (!isAuthenticated) {
