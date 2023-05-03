@@ -114,19 +114,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   //   }
   // }
 
-  let contextData = {
-    username: username,
-    authToken: storedAuthToken,
-    loginUser: loginUser,
-    logoutUser: logoutUser,
-    isAuthenticated: isAuthenticated,
-  }
-
-  // useEffect(() => {
-  //   }, [])
-
   return (
-    <AuthContext.Provider value={{ ...contextData }}>
+    <AuthContext.Provider
+      value={{
+        username: username,
+        authToken: storedAuthToken,
+        loginUser: loginUser,
+        logoutUser: logoutUser,
+        isAuthenticated: isAuthenticated,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   )
