@@ -30,23 +30,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const navigate = useNavigate()
 
-  const getDecodedUsername = (accessToken: string): string => {
-    let decodedData: any = jwt_decode(accessToken)
-    return decodedData.name
+  const getUsernameFromToken = (accessToken: string): string => {
+    let tokenData: any = jwt_decode(accessToken)
+    return tokenData.name
   }
 
-  let localStorageTokens = localStorage.getItem("authTokens")
-  let parsedLocalStorageTokens: AuthTokensType = localStorageTokens
-    ? JSON.parse(localStorageTokens)
-    : null
-
-  const [storedUsername, setUsername] = useState<string | null>(() =>
-    getDecodedUsername(parsedLocalStorageTokens.access)
+  const [username, setUsername] = useState<string | null>(
+    localStorage.getItem("username") ? localStorage.getItem("username") : null
   )
   const [storedAuthToken, setAuthToken] = useState<AuthTokensType | null>(
-    () => parsedLocalStorageTokens
+    localStorage.getItem("authTokens")
+      ? JSON.parse(localStorage.getItem("authTokens")!)
+      : null
   )
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
+    localStorage.getItem("isAuthenticated")
+      ? Boolean(localStorage.getItem("isAuthenticated"))
+      : false
+  )
 
   const loginUser = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -69,10 +70,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         console.log(response)
         if (response.status === 200) {
           let data = response.data
+          let usernameFromToken = getUsernameFromToken(data.access)
           setAuthToken(data)
-          setUsername(getDecodedUsername(data.access))
-          localStorage.setItem("authTokens", JSON.stringify(data))
           setIsAuthenticated(true)
+          setUsername(usernameFromToken)
+          localStorage.setItem("authTokens", JSON.stringify(data))
+          localStorage.setItem("isAuthenticated", JSON.stringify(true))
+          localStorage.setItem("username", JSON.stringify(usernameFromToken))
           navigate(-1)
         }
       })
@@ -84,7 +88,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const logoutUser = () => {
     setAuthToken(null)
     setUsername(null)
-    localStorage.removeItem("AuthTokens")
+    localStorage.removeItem("authTokens")
+    localStorage.removeItem("isAuthenticated")
+    localStorage.removeItem("username")
     navigate("/login")
   }
 
@@ -101,7 +107,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   //   if (response.status === 200) {
   //     let data = await response.json()
   //     setAuthToken(data)
-  //     setUsername(getDecodedUsername(data.access))
+  //     setUsername(getUsernameFromToken(data.access))
   //     localStorage.setItem("authTokens", JSON.stringify(data))
   //   } else {
   //     logoutUser()
@@ -109,7 +115,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   // }
 
   let contextData = {
-    username: storedUsername,
+    username: username,
     authToken: storedAuthToken,
     loginUser: loginUser,
     logoutUser: logoutUser,
