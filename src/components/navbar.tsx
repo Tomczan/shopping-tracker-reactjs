@@ -1,6 +1,15 @@
 import { useContext } from "react"
 import { Link } from "react-router-dom"
 import { AuthContext } from "../context/AuthContext"
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarShortcut,
+  MenubarTrigger,
+} from "../components/ui/menubar"
 
 const Navbar = () => {
   let authContext = useContext(AuthContext)
@@ -59,6 +68,21 @@ const Navbar = () => {
         </div>
       </div>
     </nav>
+    // <Menubar>
+    //   <MenubarMenu>
+    //     <MenubarTrigger>File</MenubarTrigger>
+    //     <MenubarContent>
+    //       <MenubarItem>
+    //         New Tab <MenubarShortcut>⌘T</MenubarShortcut>
+    //       </MenubarItem>
+    //       <MenubarItem>New Window</MenubarItem>
+    //       <MenubarSeparator />
+    //       <MenubarItem>Share</MenubarItem>
+    //       <MenubarSeparator />
+    //       <MenubarItem>Print</MenubarItem>
+    //     </MenubarContent>
+    //   </MenubarMenu>
+    // </Menubar>
   )
 }
 
