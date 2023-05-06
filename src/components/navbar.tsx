@@ -1,32 +1,27 @@
 import { useContext } from "react"
 import { Link } from "react-router-dom"
 import { AuthContext } from "../context/AuthContext"
-import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarSeparator,
-  MenubarShortcut,
-  MenubarTrigger,
-} from "../components/ui/menubar"
 
 const Navbar = () => {
   let authContext = useContext(AuthContext)
 
   return (
-    <nav className="bg-blue-500">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="bg-blue-500 ">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link
               to="/"
-              className="text-white font-medium tracking-wide text-2xl"
+              className="text-white font-medium tracking-wide text-2xl pr-6"
             >
               Home
             </Link>
-          </div>
-          <div className="flex items-center">
+            <Link
+              to="/option2"
+              className="text-white hover:bg-blue-400 px-3 py-2 rounded-md text-sm font-medium"
+            >
+              Option 1
+            </Link>
             <Link
               to="/option2"
               className="text-white hover:bg-blue-400 px-3 py-2 rounded-md text-sm font-medium"
@@ -40,13 +35,13 @@ const Navbar = () => {
                 to="/page1"
                 className="text-white hover:bg-blue-400 px-3 py-2 rounded-md text-sm font-medium"
               >
-                Page 1
+                Option 3
               </Link>
               <Link
                 to="/page2"
                 className="text-white hover:bg-blue-400 px-3 py-2 rounded-md text-sm font-medium"
               >
-                Page 2
+                Option 4
               </Link>
               {authContext?.authToken ? (
                 <button
@@ -68,21 +63,6 @@ const Navbar = () => {
         </div>
       </div>
     </nav>
-    // <Menubar>
-    //   <MenubarMenu>
-    //     <MenubarTrigger>File</MenubarTrigger>
-    //     <MenubarContent>
-    //       <MenubarItem>
-    //         New Tab <MenubarShortcut>⌘T</MenubarShortcut>
-    //       </MenubarItem>
-    //       <MenubarItem>New Window</MenubarItem>
-    //       <MenubarSeparator />
-    //       <MenubarItem>Share</MenubarItem>
-    //       <MenubarSeparator />
-    //       <MenubarItem>Print</MenubarItem>
-    //     </MenubarContent>
-    //   </MenubarMenu>
-    // </Menubar>
   )
 }
 
