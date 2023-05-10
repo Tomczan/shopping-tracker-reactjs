@@ -13,7 +13,7 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="mb-3 border-b border-slate-900/10 bg-slate-100 bg-opacity-60 px-6 pt-4 ">
+    <nav className="mb-3 border-b border-slate-900/10 bg-slate-100 bg-opacity-60 px-6 py-1">
       <div className="flex items-center justify-between">
         <div className="">
           <Link
@@ -27,7 +27,7 @@ const Navbar = () => {
         <ul
           className={`${
             isMobileMenuOpen ? "fixed translate-x-0" : "translate-x-[100%]"
-          } absolute inset-0 ml-32 flex flex-col gap-12 overflow-hidden bg-black bg-opacity-10 p-8 pt-24 backdrop-blur-sm transition ease-out md:static md:ml-0 md:flex md:translate-x-0 md:flex-row md:bg-inherit md:p-0 md:pt-0 md:backdrop-blur-0 md:duration-0`}
+          } absolute inset-0 ml-32 flex flex-col gap-12 overflow-hidden bg-black bg-opacity-10 p-8 pt-24 backdrop-blur-sm transition ease-out md:static md:ml-0 md:flex md:translate-x-0 md:flex-row md:bg-inherit md:p-0 md:pt-0 md:backdrop-blur-0 md:duration-0 `}
         >
           <li>
             <a href="#" className="text-lg hover:text-cyan-500 md:my-0">
@@ -67,7 +67,11 @@ const Navbar = () => {
             )}
           </div>
           <div className="z-50 block md:hidden">
-            <MenuIcon onClick={toggleMenu} />
+            {isMobileMenuOpen ? (
+              <CloseIcon onClick={toggleMenu} />
+            ) : (
+              <MenuIcon onClick={toggleMenu} />
+            )}
           </div>
         </div>
       </div>
