@@ -8,20 +8,18 @@ import { AuthContext, AuthProvider } from "./context/AuthContext"
 
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <AuthProvider>
-          <Navbar />
-          <Routes>
-            <Route
-              path="/"
-              element={<PrivateRoute children={<Home />} />}
-            ></Route>
-            <Route path="/login/" element={<Login />}></Route>
-          </Routes>
-        </AuthProvider>
-      </BrowserRouter>
-    </div>
+    <BrowserRouter>
+      <AuthProvider>
+        <Navbar />
+        <Routes>
+          <Route
+            path="/"
+            element={<PrivateRoute children={<Home />} />}
+          ></Route>
+          <Route path="/login/" element={<Login />}></Route>
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
   )
 }
 
