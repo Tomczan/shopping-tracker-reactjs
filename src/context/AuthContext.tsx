@@ -3,23 +3,21 @@ import jwt_decode from "jwt-decode"
 import { useNavigate } from "react-router-dom"
 import axiosInstance from "../utils/axiosInstance"
 import axios from "axios"
-
-export type AuthTokensType = {
-  refresh: string
-  access: string
-}
+import { useCookies } from "react-cookie"
 
 type AuthContextType = {
   username: string | null
-  authToken: AuthTokensType | null
+  authToken: string | null
+  authRefreshToken: string | null
   isAuthenticated: boolean
-  loginUser: (e: React.FormEvent<HTMLFormElement>) => Promise<void> | null
+  loginUser: (login: string, password: string) => Promise<void> | null
   logoutUser: () => void | null
 }
 
 export const AuthContext = createContext<AuthContextType>({
   username: null,
   authToken: null,
+  authRefreshToken: null,
   isAuthenticated: false,
   loginUser: () => null,
   logoutUser: () => null,
@@ -29,19 +27,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const navigate = useNavigate()
-
-  const getUsernameFromToken = (accessToken: string): string => {
-    let tokenData: any = jwt_decode(accessToken)
-    return tokenData.name
-  }
+  const [cookies, setCookie, removeCookie] = useCookies([
+    "token",
+    "refreshToken",
+  ])
+  console.log(cookies.token)
 
   const [username, setUsername] = useState<string | null>(
     localStorage.getItem("username") ? localStorage.getItem("username") : null
   )
-  const [storedAuthToken, setAuthToken] = useState<AuthTokensType | null>(
-    localStorage.getItem("authTokens")
-      ? JSON.parse(localStorage.getItem("authTokens")!)
-      : null
+  const [storedAuthToken, setAuthToken] = useState<string | null>(
+    cookies.token ? cookies.token : null
+  )
+  const [storedRefreshAuthToken, setRefreshAuthToken] = useState<string | null>(
+    cookies.refreshToken ? cookies.refreshToken : null
   )
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
     localStorage.getItem("isAuthenticated")
@@ -49,18 +48,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       : false
   )
 
-  const loginUser = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const login = e.currentTarget.elements.namedItem(
-      "username"
-    ) as HTMLInputElement
-    const password = e.currentTarget.elements.namedItem(
-      "password"
-    ) as HTMLInputElement
-    await fetchUser(login.value, password.value)
-  }
-
-  const fetchUser = async (login: string, password: string) => {
+  const loginUser = async (
+    login: string,
+    password: string,
+    navigateTo: any = -1
+  ) => {
     await axiosInstance
       .post("api/token/", {
         username: login,
@@ -70,14 +62,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         console.log(response)
         if (response.status === 200) {
           let data = response.data
-          let usernameFromToken = getUsernameFromToken(data.access)
-          setAuthToken(data)
+          setAuthToken(data.access)
+          setRefreshAuthToken(data.refresh)
           setIsAuthenticated(true)
-          setUsername(usernameFromToken)
-          localStorage.setItem("authTokens", JSON.stringify(data))
+          // token cookie
+          let decodedToken: any = jwt_decode(data.access)
+          let tokenExpDate = new Date(decodedToken.exp * 1000)
+          setCookie("token", data.access, { expires: tokenExpDate })
+          // refresh token cookie
+          let decodedRefreshToken: any = jwt_decode(data.refresh)
+          let refreshTokenExpDate = new Date(decodedRefreshToken.exp * 1000)
+          setCookie("refreshToken", data.refresh, {
+            expires: refreshTokenExpDate,
+          })
+          // storage
           localStorage.setItem("isAuthenticated", JSON.stringify(true))
-          localStorage.setItem("username", JSON.stringify(usernameFromToken))
-          navigate(-1)
+          localStorage.setItem("username", JSON.stringify(decodedToken.name))
+          setUsername(decodedToken.name)
+          navigate(navigateTo)
         }
       })
       .catch((error) => {
@@ -119,6 +121,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       value={{
         username: username,
         authToken: storedAuthToken,
+        authRefreshToken: storedRefreshAuthToken,
         loginUser: loginUser,
         logoutUser: logoutUser,
         isAuthenticated: isAuthenticated,
