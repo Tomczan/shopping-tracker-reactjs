@@ -27,7 +27,7 @@ const Navbar = () => {
         <ul
           className={`${
             isMobileMenuOpen ? "fixed translate-x-0" : "translate-x-[100%]"
-          } absolute inset-0 ml-32 flex flex-col gap-12 overflow-hidden bg-black bg-opacity-10 p-8 pt-24 backdrop-blur-sm transition ease-out md:static md:ml-0 md:flex md:translate-x-0 md:flex-row md:bg-inherit md:p-0 md:pt-0 md:backdrop-blur-0 md:duration-0 `}
+          } absolute inset-0 flex flex-col items-center gap-12 overflow-hidden bg-black bg-opacity-20 p-8 pt-24 backdrop-blur-sm transition ease-out md:static md:ml-0  md:flex md:translate-x-0 md:flex-row md:bg-inherit md:p-0 md:pt-0 md:backdrop-blur-0 md:duration-0`}
         >
           <li>
             <a href="#" className="text-lg hover:text-cyan-500 md:my-0">
