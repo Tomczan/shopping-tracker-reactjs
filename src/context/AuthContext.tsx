@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import axiosInstance from "../utils/axiosInstance"
 import axios from "axios"
 import { useCookies } from "react-cookie"
+import useAuth from "../hooks/useAuth"
 
 type AuthContextType = {
   username: string | null
@@ -27,10 +28,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const navigate = useNavigate()
-  const [cookies, setCookie, removeCookie] = useCookies([
-    "token",
-    "refreshToken",
-  ])
+  const { fetchUser, setTokensCookies } = useAuth()
+
+  const [cookies, removeCookie] = useCookies(["token", "refreshToken"])
   console.log(cookies.token)
 
   const [username, setUsername] = useState<string | null>(
@@ -53,45 +53,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     password: string,
     navigateTo: any = -1
   ) => {
-    await axiosInstance
-      .post("api/token/", {
-        username: login,
-        password: password,
-      })
-      .then((response) => {
-        console.log(response)
-        if (response.status === 200) {
-          let data = response.data
-          setAuthToken(data.access)
-          setRefreshAuthToken(data.refresh)
-          setIsAuthenticated(true)
-          // token cookie
-          let decodedToken: any = jwt_decode(data.access)
-          let tokenExpDate = new Date(decodedToken.exp * 1000)
-          setCookie("token", data.access, { expires: tokenExpDate })
-          // refresh token cookie
-          let decodedRefreshToken: any = jwt_decode(data.refresh)
-          let refreshTokenExpDate = new Date(decodedRefreshToken.exp * 1000)
-          setCookie("refreshToken", data.refresh, {
-            expires: refreshTokenExpDate,
-          })
-          // storage
-          localStorage.setItem("isAuthenticated", JSON.stringify(true))
-          localStorage.setItem("username", JSON.stringify(decodedToken.name))
-          setUsername(decodedToken.name)
-          navigate(navigateTo)
-        }
-      })
-      .catch((error) => {
-        console.log(`error: ${error}`)
-      })
+    try {
+      let tokens = await fetchUser(login, password)
+      setAuthToken(tokens.access)
+      setRefreshAuthToken(tokens.refresh)
+      setIsAuthenticated(true)
+      localStorage.setItem("isAuthenticated", JSON.stringify(true))
+      setTokensCookies(tokens)
+      let decodedToken: any = jwt_decode(tokens.access)
+      localStorage.setItem("username", JSON.stringify(decodedToken.name))
+      setUsername(decodedToken.name)
+      navigate(navigateTo)
+    } catch (error) {
+      console.log(`error in AuthProvider ${error}`)
+    }
   }
 
   const logoutUser = () => {
     setAuthToken(null)
     setUsername(null)
-    localStorage.removeItem("authTokens")
-    localStorage.removeItem("isAuthenticated")
+    setIsAuthenticated(false)
+    removeCookie("token", { path: "/" })
+    removeCookie("refreshToken", { path: "/" })
+
     localStorage.removeItem("username")
     navigate("/login")
   }
