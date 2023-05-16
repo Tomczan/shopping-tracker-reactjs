@@ -31,17 +31,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const { fetchUser, setTokensCookies } = useAuth()
 
   const [cookies, removeCookie] = useCookies(["token", "refreshToken"])
-  console.log(cookies.token)
 
   const [username, setUsername] = useState<string | null>(
     localStorage.getItem("username") ? localStorage.getItem("username") : null
   )
+
   const [storedAuthToken, setAuthToken] = useState<string | null>(
     cookies.token ? cookies.token : null
   )
+
   const [storedRefreshAuthToken, setRefreshAuthToken] = useState<string | null>(
     cookies.refreshToken ? cookies.refreshToken : null
   )
+
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
     localStorage.getItem("isAuthenticated") && storedRefreshAuthToken
       ? Boolean(localStorage.getItem("isAuthenticated"))
@@ -82,6 +84,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       maxAge: 0,
     })
     localStorage.removeItem("username")
+    localStorage.setItem("isAuthenticated", JSON.stringify(false))
     navigate("/login")
   }
 
