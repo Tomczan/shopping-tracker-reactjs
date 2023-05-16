@@ -37,12 +37,16 @@ const useAuth = () => {
     // token cookie
     let decodedToken: any = jwt_decode(tokens.access)
     let tokenExpDate = new Date(decodedToken.exp * 1000)
-    setCookie("token", tokens.access, { expires: tokenExpDate })
+    setCookie("token", tokens.access, {
+      expires: tokenExpDate,
+      path: "/",
+    })
     // refresh token cookie
     let decodedRefreshToken: any = jwt_decode(tokens.refresh)
     let refreshTokenExpDate = new Date(decodedRefreshToken.exp * 1000)
     setCookie("refreshToken", tokens.refresh, {
       expires: refreshTokenExpDate,
+      path: "/",
     })
   }
   return { fetchUser, setTokensCookies }
