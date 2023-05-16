@@ -6,7 +6,7 @@ import { MenuIcon, X as CloseIcon } from "lucide-react"
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false)
   // document.body.classList.add("dark")
-  let authContext = useContext(AuthContext)
+  let { isAuthenticated, logoutUser } = useContext(AuthContext)
 
   const toggleMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen)
@@ -53,16 +53,16 @@ const Navbar = () => {
 
         <div className="flex gap-2">
           <div className={`${isMobileMenuOpen ? "hidden" : "flex "}`}>
-            {authContext?.authToken ? (
+            {isAuthenticated ? (
               <button
-                onClick={authContext.logoutUser}
+                onClick={logoutUser}
                 className="rounded-md  hover:bg-blue-400"
               >
                 Logout
               </button>
             ) : (
               <Link to="/login" className="rounded-md  hover:bg-blue-400">
-                Logout
+                Login
               </Link>
             )}
           </div>
