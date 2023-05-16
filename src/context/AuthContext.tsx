@@ -30,7 +30,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const navigate = useNavigate()
   const { fetchUser, setTokensCookies } = useAuth()
 
-  const [cookies, removeCookie] = useCookies(["token", "refreshToken"])
+  const [cookies, , removeCookie] = useCookies(["token", "refreshToken"])
 
   const [username, setUsername] = useState<string | null>(
     localStorage.getItem("username") ? localStorage.getItem("username") : null
@@ -75,14 +75,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setAuthToken(null)
     setUsername(null)
     setIsAuthenticated(false)
-    removeCookie("token", "", {
-      path: "/",
-      maxAge: 0,
-    })
-    removeCookie("refreshToken", "", {
-      path: "/",
-      maxAge: 0,
-    })
+    removeCookie("token")
+    removeCookie("refreshToken")
     localStorage.removeItem("username")
     localStorage.setItem("isAuthenticated", JSON.stringify(false))
     navigate("/login")
