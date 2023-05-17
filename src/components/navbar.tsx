@@ -3,6 +3,13 @@ import { Link } from "react-router-dom"
 import { AuthContext } from "../context/AuthContext"
 import { MenuIcon, X as CloseIcon } from "lucide-react"
 
+const navigation: { name: string; href: string }[] = [
+  { name: "Option 1", href: "#" },
+  { name: "Option 2", href: "#" },
+  { name: "Option 3", href: "#" },
+  { name: "Option 4", href: "#" },
+]
+
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false)
   // document.body.classList.add("dark")
@@ -24,32 +31,21 @@ const Navbar = () => {
           </Link>
         </div>
 
-        <ul
+        <div
           className={`${
             isMobileMenuOpen ? "fixed translate-x-0" : "translate-x-[100%]"
           } absolute inset-0 flex flex-col items-center gap-12 overflow-hidden bg-black bg-opacity-20 p-8 pt-24 backdrop-blur-sm transition ease-out md:static md:ml-0  md:flex md:translate-x-0 md:flex-row md:bg-inherit md:p-0 md:pt-0 md:backdrop-blur-0 md:duration-0`}
         >
-          <li>
-            <a href="#" className="text-lg hover:text-cyan-500 md:my-0">
-              Option 1
+          {navigation.map((item) => (
+            <a
+              key={item.name}
+              href={item.href}
+              className="text-lg hover:text-cyan-500 md:my-0"
+            >
+              {item.name}
             </a>
-          </li>
-          <li>
-            <a href="#" className="text-lg hover:text-cyan-500 md:my-0">
-              Option 2
-            </a>
-          </li>
-          <li>
-            <a href="#" className="text-lg hover:text-cyan-500 md:my-0">
-              Option 3
-            </a>
-          </li>
-          <li>
-            <a href="#" className="text-lg hover:text-cyan-500 md:my-0">
-              Option 4
-            </a>
-          </li>
-        </ul>
+          ))}
+        </div>
 
         <div className="flex gap-2">
           <div className={`${isMobileMenuOpen ? "hidden" : "flex "}`}>
