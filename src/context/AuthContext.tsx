@@ -1,8 +1,6 @@
-import { createContext, useState, useEffect } from "react"
+import { createContext, useState } from "react"
 import jwt_decode from "jwt-decode"
 import { useNavigate } from "react-router-dom"
-import axiosInstance from "../utils/axiosInstance"
-import axios from "axios"
 import { useCookies } from "react-cookie"
 import useAuth from "../hooks/useAuth"
 
@@ -28,20 +26,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const navigate = useNavigate()
-  const { fetchUser, setTokensCookies } = useAuth()
+  const { fetchUser, setJwtCookies, removeJwtCookies } = useAuth()
 
-  const [cookies, , removeCookie] = useCookies(["token", "refreshToken"])
+  const [cookies] = useCookies(["accessToken", "refreshToken"])
 
   const [username, setUsername] = useState<string | null>(
-    localStorage.getItem("username") ? localStorage.getItem("username") : null
+    localStorage.getItem("username") || null
   )
 
   const [storedAuthToken, setAuthToken] = useState<string | null>(
-    cookies.token ? cookies.token : null
+    cookies.accessToken || null
   )
 
   const [storedRefreshAuthToken, setRefreshAuthToken] = useState<string | null>(
-    cookies.refreshToken ? cookies.refreshToken : null
+    cookies.refreshToken || null
   )
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
@@ -53,15 +51,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const loginUser = async (
     login: string,
     password: string,
-    navigateTo: any = -1
-  ) => {
+    navigateTo: string = "/"
+  ): Promise<void> => {
     try {
       let tokens = await fetchUser(login, password)
       setAuthToken(tokens.access)
       setRefreshAuthToken(tokens.refresh)
       setIsAuthenticated(true)
       localStorage.setItem("isAuthenticated", JSON.stringify(true))
-      setTokensCookies(tokens)
+      setJwtCookies(tokens)
       let decodedToken: any = jwt_decode(tokens.access)
       localStorage.setItem("username", JSON.stringify(decodedToken.name))
       setUsername(decodedToken.name)
@@ -71,12 +69,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
-  const logoutUser = () => {
+  const logoutUser = (): void => {
     setAuthToken(null)
     setUsername(null)
     setIsAuthenticated(false)
-    removeCookie("token")
-    removeCookie("refreshToken")
+    removeJwtCookies()
     localStorage.removeItem("username")
     localStorage.setItem("isAuthenticated", JSON.stringify(false))
     navigate("/login")
