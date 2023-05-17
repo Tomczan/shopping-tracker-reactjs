@@ -8,7 +8,10 @@ export type AuthTokensType = {
 }
 
 const useAuth = () => {
-  const [cookies, setCookie] = useCookies(["token", "refreshToken"])
+  const [cookies, setCookie, removeCookie] = useCookies([
+    "accessToken",
+    "refreshToken",
+  ])
 
   const fetchUser = (
     login: string,
@@ -33,11 +36,11 @@ const useAuth = () => {
         })
     })
   }
-  const setTokensCookies = (tokens: AuthTokensType): void => {
-    // token cookie
+  const setJwtCookies = (tokens: AuthTokensType): void => {
+    // access token cookie
     let decodedToken: any = jwt_decode(tokens.access)
     let tokenExpDate = new Date(decodedToken.exp * 1000)
-    setCookie("token", tokens.access, {
+    setCookie("accessToken", tokens.access, {
       expires: tokenExpDate,
       path: "/",
     })
@@ -49,7 +52,13 @@ const useAuth = () => {
       path: "/",
     })
   }
-  return { fetchUser, setTokensCookies }
+
+  const removeJwtCookies = () => {
+    removeCookie("accessToken")
+    removeCookie("refreshToken")
+  }
+
+  return { fetchUser, setJwtCookies, removeJwtCookies }
 }
 
 export default useAuth
