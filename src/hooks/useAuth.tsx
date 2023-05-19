@@ -13,7 +13,7 @@ const useAuth = () => {
     "refreshToken",
   ])
 
-  const fetchUser = (
+  const obtainToken = (
     login: string,
     password: string
   ): Promise<AuthTokensType> => {
@@ -36,18 +36,40 @@ const useAuth = () => {
         })
     })
   }
-  const setJwtCookies = (tokens: AuthTokensType): void => {
-    // access token cookie
-    let decodedToken: any = jwt_decode(tokens.access)
+
+  const refreshToken = (refreshToken: string): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post("api/token/refresh", {
+          refresh: refreshToken,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            let tokens = response.data
+            resolve(tokens)
+          } else {
+            reject("Failed to refresh token")
+          }
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  }
+
+  const setAccessTokenCookie = (accessToken: string): void => {
+    let decodedToken: any = jwt_decode(accessToken)
     let tokenExpDate = new Date(decodedToken.exp * 1000)
-    setCookie("accessToken", tokens.access, {
+    setCookie("accessToken", accessToken, {
       expires: tokenExpDate,
       path: "/",
     })
-    // refresh token cookie
-    let decodedRefreshToken: any = jwt_decode(tokens.refresh)
+  }
+
+  const setRefreshTokenCookie = (refreshToken: string): void => {
+    let decodedRefreshToken: any = jwt_decode(refreshToken)
     let refreshTokenExpDate = new Date(decodedRefreshToken.exp * 1000)
-    setCookie("refreshToken", tokens.refresh, {
+    setCookie("refreshToken", refreshToken, {
       expires: refreshTokenExpDate,
       path: "/",
     })
@@ -58,7 +80,12 @@ const useAuth = () => {
     removeCookie("refreshToken")
   }
 
-  return { fetchUser, setJwtCookies, removeJwtCookies }
+  return {
+    obtainToken,
+    setAccessTokenCookie,
+    setRefreshTokenCookie,
+    removeJwtCookies,
+  }
 }
 
 export default useAuth

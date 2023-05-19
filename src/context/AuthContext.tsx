@@ -26,7 +26,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const navigate = useNavigate()
-  const { fetchUser, setJwtCookies, removeJwtCookies } = useAuth()
+  const {
+    obtainToken,
+    setAccessTokenCookie,
+    setRefreshTokenCookie,
+    removeJwtCookies,
+  } = useAuth()
 
   const [cookies] = useCookies(["accessToken", "refreshToken"])
 
@@ -34,16 +39,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.getItem("username") || null
   )
 
-  const [storedAuthToken, setAuthToken] = useState<string | null>(
+  const [accessToken, setAccessToken] = useState<string | null>(
     cookies.accessToken || null
   )
 
-  const [storedRefreshAuthToken, setRefreshAuthToken] = useState<string | null>(
+  const [refreshToken, setRefreshToken] = useState<string | null>(
     cookies.refreshToken || null
   )
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
-    localStorage.getItem("isAuthenticated") && storedRefreshAuthToken
+    localStorage.getItem("isAuthenticated") && refreshToken
       ? Boolean(localStorage.getItem("isAuthenticated"))
       : false
   )
@@ -54,13 +59,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     navigateTo: string = "/"
   ): Promise<void> => {
     try {
-      let tokens = await fetchUser(login, password)
-      setAuthToken(tokens.access)
-      setRefreshAuthToken(tokens.refresh)
+      let tokens = await obtainToken(login, password)
+      setAccessToken(tokens.access)
+      setAccessTokenCookie(tokens.access)
+      setRefreshToken(tokens.refresh)
+      setRefreshTokenCookie(tokens.refresh)
       setIsAuthenticated(true)
-      localStorage.setItem("isAuthenticated", JSON.stringify(true))
-      setJwtCookies(tokens)
       let decodedToken: any = jwt_decode(tokens.access)
+      localStorage.setItem("isAuthenticated", JSON.stringify(true))
       localStorage.setItem("username", JSON.stringify(decodedToken.name))
       setUsername(decodedToken.name)
       navigate(navigateTo)
@@ -70,7 +76,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   const logoutUser = (): void => {
-    setAuthToken(null)
+    setAccessToken(null)
     setUsername(null)
     setIsAuthenticated(false)
     removeJwtCookies()
@@ -86,12 +92,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   //     headers: {
   //       "Content-Type": "application/json",
   //     },
-  //     body: JSON.stringify({ refresh: storedAuthToken?.refresh }),
+  //     body: JSON.stringify({ refresh: accessToken?.refresh }),
   //   })
 
   //   if (response.status === 200) {
   //     let data = await response.json()
-  //     setAuthToken(data)
+  //     setAccessToken(data)
   //     setUsername(getUsernameFromToken(data.access))
   //     localStorage.setItem("authTokens", JSON.stringify(data))
   //   } else {
@@ -103,8 +109,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     <AuthContext.Provider
       value={{
         username: username,
-        authToken: storedAuthToken,
-        authRefreshToken: storedRefreshAuthToken,
+        authToken: accessToken,
+        authRefreshToken: refreshToken,
         loginUser: loginUser,
         logoutUser: logoutUser,
         isAuthenticated: isAuthenticated,
