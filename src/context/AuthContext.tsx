@@ -2,7 +2,7 @@ import { createContext, useState } from "react"
 import jwt_decode from "jwt-decode"
 import { useNavigate } from "react-router-dom"
 import { useCookies } from "react-cookie"
-import useAuth from "../hooks/useAuth"
+import useAuth, { AuthTokensType } from "../hooks/useAuth"
 
 type AuthContextType = {
   username: string | null
@@ -60,15 +60,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   ): Promise<void> => {
     try {
       let tokens = await obtainToken(login, password)
-      setAccessToken(tokens.access)
-      setAccessTokenCookie(tokens.access)
-      setRefreshToken(tokens.refresh)
-      setRefreshTokenCookie(tokens.refresh)
-      setIsAuthenticated(true)
-      let decodedToken: any = jwt_decode(tokens.access)
-      localStorage.setItem("isAuthenticated", JSON.stringify(true))
-      localStorage.setItem("username", JSON.stringify(decodedToken.name))
-      setUsername(decodedToken.name)
+      updateUserContext(tokens)
       navigate(navigateTo)
     } catch (error) {
       console.log(`error in AuthProvider ${error}`)
@@ -83,6 +75,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.removeItem("username")
     localStorage.setItem("isAuthenticated", JSON.stringify(false))
     navigate("/login")
+  }
+
+  const updateUserContext = (tokens: AuthTokensType): void => {
+    setAccessToken(tokens.access)
+    setAccessTokenCookie(tokens.access)
+    setRefreshToken(tokens.refresh)
+    setRefreshTokenCookie(tokens.refresh)
+    setIsAuthenticated(true)
+    let decodedToken: any = jwt_decode(tokens.access)
+    localStorage.setItem("isAuthenticated", JSON.stringify(true))
+    localStorage.setItem("username", JSON.stringify(decodedToken.name))
+    setUsername(decodedToken.name)
   }
 
   // const updateToken = async () => {
