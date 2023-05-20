@@ -1,5 +1,5 @@
 import useCookies from "react-cookie/cjs/useCookies"
-import axiosInstance from "../utils/axiosInstance"
+import axiosInstance from "../hooks/useAxios"
 import jwt_decode from "jwt-decode"
 
 export type AuthTokensType = {
