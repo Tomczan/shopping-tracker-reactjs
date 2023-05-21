@@ -20,15 +20,14 @@ const useAuthAxios = () => {
   })
 
   axiosInstance.interceptors.request.use(async (req) => {
-    console.log("hey im here")
     if (!cookies.accessToken && cookies.refreshToken) {
       try {
         const response = await refreshToken(cookies.refreshToken)
         updateUserContext(response)
         req.headers.Authorization = `Bearer ${response.access}`
       } catch (error) {
-        console.log(
-          `Something went wrong with refresh token inside auth interceptor ${error}`
+        console.error(
+          `Something went wrong with refresh token inside useAuthAxios interceptor ${error}`
         )
         logoutUser()
       }
