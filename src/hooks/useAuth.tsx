@@ -40,7 +40,7 @@ const useAuth = () => {
   const refreshToken = (refreshToken: string): Promise<AuthTokensType> => {
     return new Promise((resolve, reject) => {
       axiosInstance
-        .post("api/token/refresh", {
+        .post("api/token/refresh/", {
           refresh: refreshToken,
         })
         .then((response) => {
