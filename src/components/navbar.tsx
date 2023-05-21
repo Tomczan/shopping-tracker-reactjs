@@ -12,7 +12,7 @@ const navigation: { name: string; href: string }[] = [
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false)
-  // document.body.classList.add("dark")
+  document.body.classList.add("dark")
   let { isAuthenticated, logoutUser } = useContext(AuthContext)
 
   const toggleMenu = () => {
@@ -20,7 +20,7 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="mb-3 border-b border-slate-900/10 bg-slate-100 bg-opacity-60 px-6 py-1">
+    <nav className="mb-3 border-b border-slate-900/10 bg-slate-100 bg-opacity-60 px-6 py-1 dark:bg-slate-800">
       <div className="flex items-center justify-between">
         <div className="">
           <Link
