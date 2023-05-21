@@ -37,7 +37,7 @@ const useAuth = () => {
     })
   }
 
-  const refreshToken = (refreshToken: string): Promise<string> => {
+  const refreshToken = (refreshToken: string): Promise<AuthTokensType> => {
     return new Promise((resolve, reject) => {
       axiosInstance
         .post("api/token/refresh", {
@@ -82,6 +82,7 @@ const useAuth = () => {
 
   return {
     obtainToken,
+    refreshToken,
     setAccessTokenCookie,
     setRefreshTokenCookie,
     removeJwtCookies,

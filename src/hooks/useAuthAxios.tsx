@@ -1,13 +1,16 @@
 import axios from "axios"
-import jwt_decode from "jwt-decode"
-import dayjs from "dayjs"
 import { useContext } from "react"
 import { AuthContext } from "../context/AuthContext"
+import { useCookies } from "react-cookie"
+import useAuth from "./useAuth"
 
 const baseURL = import.meta.env.VITE_BASE_URL
 
 const useAuthAxios = () => {
   let authContext = useContext(AuthContext)
+  const [cookies] = useCookies(["accessToken", "refreshToken"])
+  const { refreshToken } = useAuth()
+  let { updateUserContext, logoutUser } = useContext(AuthContext)
 
   const axiosInstance = axios.create({
     baseURL,
@@ -18,7 +21,16 @@ const useAuthAxios = () => {
 
   axiosInstance.interceptors.request.use(async (req) => {
     console.log("hey im here")
-    if (!authContext.authToken) {
+    if (!cookies.accessToken && cookies.refreshToken) {
+      try {
+        const response = await refreshToken(cookies.refreshToken)
+        updateUserContext(response)
+      } catch (error) {
+        console.log(
+          `Something went wrong with refresh token inside auth interceptor ${error}`
+        )
+        logoutUser()
+      }
     }
     return req
   })

@@ -11,6 +11,7 @@ type AuthContextType = {
   isAuthenticated: boolean
   loginUser: (login: string, password: string) => Promise<void> | null
   logoutUser: () => void | null
+  updateUserContext: (tokens: AuthTokensType) => void | null
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -20,6 +21,7 @@ export const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
   loginUser: () => null,
   logoutUser: () => null,
+  updateUserContext: () => null,
 })
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -89,26 +91,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setUsername(decodedToken.name)
   }
 
-  // const updateToken = async () => {
-  //   console.log("Update token called")
-  //   let response = await fetch("http://127.0.0.1:8000/api/token/refresh/", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ refresh: accessToken?.refresh }),
-  //   })
-
-  //   if (response.status === 200) {
-  //     let data = await response.json()
-  //     setAccessToken(data)
-  //     setUsername(getUsernameFromToken(data.access))
-  //     localStorage.setItem("authTokens", JSON.stringify(data))
-  //   } else {
-  //     logoutUser()
-  //   }
-  // }
-
   return (
     <AuthContext.Provider
       value={{
@@ -117,6 +99,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         authRefreshToken: refreshToken,
         loginUser: loginUser,
         logoutUser: logoutUser,
+        updateUserContext: updateUserContext,
         isAuthenticated: isAuthenticated,
       }}
     >
