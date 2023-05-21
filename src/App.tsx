@@ -5,6 +5,7 @@ import Navbar from "./components/navbar"
 import Login from "./pages/login/login"
 import PrivateRoute from "./utils/PrivateRoute"
 import { AuthContext, AuthProvider } from "./context/AuthContext"
+import UserProducts from "./pages/user/product/products"
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             element={<PrivateRoute children={<Home />} />}
           ></Route>
           <Route path="/login/" element={<Login />}></Route>
+          <Route path="/my-products/" element={<UserProducts />}></Route>
         </Routes>
       </AuthProvider>
     </BrowserRouter>
