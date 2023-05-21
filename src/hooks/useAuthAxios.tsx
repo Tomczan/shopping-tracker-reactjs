@@ -25,6 +25,7 @@ const useAuthAxios = () => {
       try {
         const response = await refreshToken(cookies.refreshToken)
         updateUserContext(response)
+        req.headers.Authorization = `Bearer ${response.access}`
       } catch (error) {
         console.log(
           `Something went wrong with refresh token inside auth interceptor ${error}`
