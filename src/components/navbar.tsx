@@ -1,6 +1,6 @@
 import { useContext, useState } from "react"
 import { Link } from "react-router-dom"
-import { AuthContext } from "../context/AuthContext"
+import { AuthContext } from "../contexts/AuthContext"
 import { MenuIcon, X as CloseIcon } from "lucide-react"
 
 const navigation: { name: string; href: string }[] = [

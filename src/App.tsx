@@ -4,7 +4,7 @@ import Home from "./pages/home/home"
 import Navbar from "./components/navbar"
 import Login from "./pages/login/login"
 import PrivateRoute from "./utils/PrivateRoute"
-import { AuthContext, AuthProvider } from "./context/AuthContext"
+import { AuthContext, AuthProvider } from "./contexts/AuthContext"
 import UserProducts from "./pages/user/product/products"
 
 function App() {

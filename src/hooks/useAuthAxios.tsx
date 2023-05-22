@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useContext } from "react"
-import { AuthContext } from "../context/AuthContext"
+import { AuthContext } from "../contexts/AuthContext"
 import { useCookies } from "react-cookie"
 import useAuth from "./useAuth"
 
