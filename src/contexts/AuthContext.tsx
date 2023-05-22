@@ -2,7 +2,8 @@ import { createContext, useState } from "react"
 import jwt_decode from "jwt-decode"
 import { useNavigate } from "react-router-dom"
 import { useCookies } from "react-cookie"
-import useAuth, { AuthTokensType } from "../hooks/useAuth"
+import { AuthTokensType } from "../types/AuthTokens"
+import useAuth from "../hooks/useAuth"
 
 type AuthContextType = {
   username: string | null

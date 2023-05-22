@@ -1,11 +1,9 @@
 import useCookies from "react-cookie/cjs/useCookies"
 import axiosInstance from "../hooks/useAxios"
 import jwt_decode from "jwt-decode"
+import { AuthTokensType } from "../types/AuthTokens"
 
-export type AuthTokensType = {
-  refresh: string
-  access: string
-}
+
 
 const useAuth = () => {
   const [cookies, setCookie, removeCookie] = useCookies([
