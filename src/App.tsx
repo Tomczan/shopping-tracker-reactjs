@@ -6,6 +6,7 @@ import Login from "./pages/login/login"
 import PrivateRoute from "./utils/PrivateRoute"
 import { AuthContext, AuthProvider } from "./contexts/AuthContext"
 import UserProducts from "./pages/user/product/products"
+import Dashboard from "./pages/dashboard/dashboard"
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             element={<PrivateRoute children={<Home />} />}
           ></Route>
           <Route path="/login/" element={<Login />}></Route>
+          <Route path="/dashboard/" element={<Dashboard />}></Route>
           <Route path="/my-products/" element={<UserProducts />}></Route>
         </Routes>
       </AuthProvider>
