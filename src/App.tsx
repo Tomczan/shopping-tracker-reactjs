@@ -1,12 +1,11 @@
-import { useState } from "react"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import Home from "./pages/home/home"
 import Navbar from "./components/navbar"
 import Login from "./pages/login/login"
 import PrivateRoute from "./utils/PrivateRoute"
-import { AuthContext, AuthProvider } from "./contexts/AuthContext"
-import UserProducts from "./pages/user/product/products"
-import Dashboard from "./pages/dashboard/dashboard"
+import { AuthProvider } from "./contexts/AuthContext"
+import { Products } from "./pages/dashboard/products/products"
+import { DashboardLayout } from "./pages/dashboard/dashboardLayout"
 
 function App() {
   return (
@@ -18,9 +17,16 @@ function App() {
             path="/"
             element={<PrivateRoute children={<Home />} />}
           ></Route>
+          <Route
+            path="/dashboard/my-products/"
+            element={
+              <DashboardLayout>
+                <Products />
+              </DashboardLayout>
+            }
+          ></Route>
           <Route path="/login/" element={<Login />}></Route>
-          <Route path="/dashboard/" element={<Dashboard />}></Route>
-          <Route path="/my-products/" element={<UserProducts />}></Route>
+          {/* <Route path="/my-products/" element={<UserProducts />}></Route> */}
         </Routes>
       </AuthProvider>
     </BrowserRouter>
