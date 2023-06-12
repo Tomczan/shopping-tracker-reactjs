@@ -20,9 +20,13 @@ function App() {
           <Route
             path="/dashboard/my-products/"
             element={
-              <DashboardLayout>
-                <Products />
-              </DashboardLayout>
+              <PrivateRoute
+                children={
+                  <DashboardLayout>
+                    <Products />
+                  </DashboardLayout>
+                }
+              />
             }
           ></Route>
           <Route path="/login/" element={<Login />}></Route>
