@@ -6,15 +6,16 @@ export type PrivateRouteProps = {
   children: JSX.Element
 }
 
-const PrivateRoute = ({ children }: PrivateRouteProps) => {
-  let { isAuthenticated } = useContext(AuthContext)
+const AuthWrapper = ({ children }: PrivateRouteProps) => {
+  let { isAuthenticated, authRefreshToken } = useContext(AuthContext)
   console.log(isAuthenticated)
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated || !authRefreshToken) {
+    console.log("not authorized, navigating...")
     return <Navigate to={"/login"} />
   }
 
   return children
 }
 
-export default PrivateRoute
+export default AuthWrapper
