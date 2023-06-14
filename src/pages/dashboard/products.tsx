@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
-import useProducts, { IProduct } from "./useProducts"
+import useProduct, { IProduct } from "./useProduct"
 
 export const Products = () => {
-  const { getUserProducts } = useProducts()
+  const { getUserProducts } = useProduct()
   const [products, setProducts] = useState<IProduct[]>([])
 
   useEffect(() => {
@@ -14,7 +14,6 @@ export const Products = () => {
         console.error(error)
       }
     }
-
     fetchData()
   }, [])
 

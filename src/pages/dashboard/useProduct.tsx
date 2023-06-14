@@ -1,4 +1,4 @@
-import useAuthAxios from "../../../hooks/useAuthAxios"
+import useAuthAxios from "../../hooks/useAuthAxios"
 
 export interface IProduct {
   id: number
@@ -19,7 +19,7 @@ export interface IProduct {
   updated: string
 }
 
-const useProducts = () => {
+const useProduct = () => {
   const api = useAuthAxios()
 
   const getUserProducts = (): Promise<IProduct[]> => {
@@ -43,4 +43,4 @@ const useProducts = () => {
   }
 }
 
-export default useProducts
+export default useProduct

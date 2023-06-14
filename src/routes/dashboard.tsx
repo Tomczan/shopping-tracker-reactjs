@@ -1,18 +1,20 @@
 import { Navigate } from "react-router-dom"
-import { DashboardLayout } from "../pages/dashboard/dashboardLayout"
-import { Products } from "../pages/dashboard/products/products"
-import PrivateRoute from "../utils/PrivateRoute"
+import { DashboardLayout } from "../layouts/dashboardLayout"
+import { Products } from "../pages/dashboard/products"
+import AuthWrapper from "../utils/AuthWrapper"
+import Product from "../pages/dashboard/product"
 
 export const dashboardRoutes = [
   { path: "/dashboard/", element: <Navigate to="/dashboard/products" /> },
   {
     path: "/dashboard/products/",
     element: (
-      <PrivateRoute>
+      <AuthWrapper>
         <DashboardLayout>
           <Products />
         </DashboardLayout>
-      </PrivateRoute>
+      </AuthWrapper>
     ),
   },
+  { path: "/product/:id", element: <Product /> },
 ]
