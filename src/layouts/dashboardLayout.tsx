@@ -1,5 +1,5 @@
 import { ReactNode } from "react"
-import Dashboard from "./dashboard"
+import Dashboard from "../components/dashboard"
 
 interface DashboardLayoutProps {
   children: ReactNode
