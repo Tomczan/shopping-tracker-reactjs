@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import useProduct, { IProduct } from "../useProduct"
+import { Link } from "react-router-dom"
 
 export const Products = () => {
   const { getUserProducts } = useProduct()
@@ -30,6 +31,14 @@ export const Products = () => {
             <span> Nazwa: {item.product.name}</span>
             <br />
             <span> Cena: {item.price}</span>
+            <p>
+              <Link
+                to={`/dashboard/product/${item.id}`}
+                className="text-3xl font-medium tracking-wide transition hover:text-blue-500"
+              >
+                Details
+              </Link>
+            </p>
           </div>
         ))}
       </div>
