@@ -5,9 +5,9 @@ import AuthWrapper from "../utils/AuthWrapper"
 import Product from "../pages/dashboard/product/product"
 
 export const dashboardRoutes = [
-  { path: "/dashboard/", element: <Navigate to="/dashboard/products" /> },
+  { path: "/dashboard/", element: <Navigate to="/dashboard/product-list/" /> },
   {
-    path: "/dashboard/products/",
+    path: "/dashboard/product-list/",
     element: (
       <AuthWrapper>
         <DashboardLayout>
@@ -16,5 +16,14 @@ export const dashboardRoutes = [
       </AuthWrapper>
     ),
   },
-  { path: "/product/:id", element: <Product /> },
+  {
+    path: "/dashboard/product/:id",
+    element: (
+      <AuthWrapper>
+        <DashboardLayout>
+          <Product />
+        </DashboardLayout>
+      </AuthWrapper>
+    ),
+  },
 ]
