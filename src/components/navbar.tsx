@@ -4,7 +4,7 @@ import { AuthContext } from "../contexts/AuthContext"
 import { MenuIcon, X as CloseIcon } from "lucide-react"
 
 const navigation: { name: string; href: string }[] = [
-  { name: "Option 1", href: "#" },
+  { name: "Dashboard", href: "/dashboard/" },
   { name: "Option 2", href: "#" },
   { name: "Option 3", href: "#" },
   { name: "Option 4", href: "#" },
@@ -12,7 +12,6 @@ const navigation: { name: string; href: string }[] = [
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false)
-  document.body.classList.add("dark")
   let { isAuthenticated, logoutUser } = useContext(AuthContext)
 
   const toggleMenu = () => {
@@ -36,14 +35,14 @@ const Navbar = () => {
             isMobileMenuOpen ? "fixed translate-x-0" : "translate-x-[100%]"
           } absolute inset-0 flex flex-col items-center gap-12 overflow-hidden bg-black bg-opacity-20 p-8 pt-24 backdrop-blur-sm transition ease-out md:static md:ml-0  md:flex md:translate-x-0 md:flex-row md:bg-inherit md:p-0 md:pt-0 md:backdrop-blur-0 md:duration-0`}
         >
-          {navigation.map((item) => (
-            <a
-              key={item.name}
-              href={item.href}
-              className="text-lg hover:text-cyan-500 md:my-0"
+          {navigation.map((item, id) => (
+            <Link
+              key={id}
+              to={item.href}
+              className="text-2xl font-thin  transition hover:text-blue-500"
             >
               {item.name}
-            </a>
+            </Link>
           ))}
         </div>
 

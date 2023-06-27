@@ -3,8 +3,6 @@ import axiosInstance from "../hooks/useAxios"
 import jwt_decode from "jwt-decode"
 import { AuthTokensType } from "../types/AuthTokens"
 
-
-
 const useAuth = () => {
   const [cookies, setCookie, removeCookie] = useCookies([
     "accessToken",
