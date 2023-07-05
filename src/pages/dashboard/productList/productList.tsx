@@ -3,13 +3,13 @@ import useProduct, { IProduct } from "../useProduct"
 import { Link } from "react-router-dom"
 
 export const Products = () => {
-  const { getUserProducts } = useProduct()
+  const { getProducts } = useProduct()
   const [products, setProducts] = useState<IProduct[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getUserProducts()
+        const data = await getProducts()
         setProducts(data)
       } catch (error) {
         console.error(error)
