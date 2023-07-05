@@ -22,7 +22,7 @@ export interface IProduct {
 const useProduct = () => {
   const api = useAuthAxios()
 
-  const getUserProducts = (): Promise<IProduct[]> => {
+  const getProducts = (): Promise<IProduct[]> => {
     return api
       .get("api/my-products/")
       .then((response) => {
@@ -38,8 +38,24 @@ const useProduct = () => {
       })
   }
 
+  const getProductDetail = (id: number): Promise<IProduct[]> => {
+    return api
+      .get(`api/my-products/${id}`)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.data
+        } else {
+          throw new Error("Failed to fetch user's product detail.")
+        }
+      })
+      .catch((error) => {
+        throw error
+      })
+  }
+
   return {
-    getUserProducts,
+    getProducts,
+    getProductDetail,
   }
 }
 
