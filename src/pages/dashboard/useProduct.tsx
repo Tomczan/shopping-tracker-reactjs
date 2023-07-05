@@ -38,7 +38,7 @@ const useProduct = () => {
       })
   }
 
-  const getProductDetail = (id: number): Promise<IProduct[]> => {
+  const getProductDetail = (id: string): Promise<IProduct[]> => {
     return api
       .get(`api/my-products/${id}`)
       .then((response) => {
