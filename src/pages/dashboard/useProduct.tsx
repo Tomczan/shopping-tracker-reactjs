@@ -1,6 +1,7 @@
+import { useQuery } from "@tanstack/react-query"
 import useAuthAxios from "../../hooks/useAuthAxios"
 
-export interface IProduct {
+export type Product = {
   id: number
   created: string
   discount_price: string
@@ -22,23 +23,29 @@ export interface IProduct {
 const useProduct = () => {
   const api = useAuthAxios()
 
-  const getProducts = (): Promise<IProduct[]> => {
-    return api
-      .get("api/my-products/")
-      .then((response) => {
-        if (response.status === 200) {
-          return response.data as IProduct[]
-        } else {
-          throw new Error("Failed to fetch user's products.")
-        }
-      })
-      .catch((error) => {
-        console.error(error)
-        throw error
-      })
+  const getProducts = () => {
+    return useQuery({
+      queryKey: ["productList"],
+      queryFn: async () => {
+        const data = await api
+          .get("api/my-products/")
+          .then((response) => {
+            if (response.status === 200) {
+              return response.data as Product[]
+            } else {
+              throw new Error("Failed to fetch user's products.")
+            }
+          })
+          .catch((error) => {
+            console.error(error)
+            throw error
+          })
+        return data
+      },
+    })
   }
 
-  const getProductDetail = (id: string): Promise<IProduct[]> => {
+  const getProductDetail = async (id: string): Promise<Product[]> => {
     return api
       .get(`api/my-products/${id}`)
       .then((response) => {
