@@ -45,19 +45,25 @@ const useProduct = () => {
     })
   }
 
-  const getProductDetail = async (id: string): Promise<Product[]> => {
-    return api
-      .get(`api/my-products/${id}`)
-      .then((response) => {
-        if (response.status === 200) {
-          return response.data
-        } else {
-          throw new Error("Failed to fetch user's product detail.")
-        }
-      })
-      .catch((error) => {
-        throw error
-      })
+  const getProductDetail = (id: string) => {
+    return useQuery({
+      queryKey: ["productDetail"],
+      queryFn: async () => {
+        const data = await api
+          .get(`api/my-products/${id}`)
+          .then((response) => {
+            if (response.status === 200) {
+              return response.data as Product[]
+            } else {
+              throw new Error("Failed to fetch user's product detail.")
+            }
+          })
+          .catch((error) => {
+            throw error
+          })
+        return data
+      },
+    })
   }
 
   return {
