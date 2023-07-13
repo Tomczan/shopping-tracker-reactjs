@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom"
-import useProduct, { Product } from "../useProduct"
+import useProduct from "../useProduct"
 
-const Product = () => {
+export const ProductDetails = () => {
   const { id } = useParams()
   const { getProductDetail } = useProduct()
 
@@ -34,5 +34,3 @@ const Product = () => {
     )
   }
 }
-
-export default Product
