@@ -1,17 +1,17 @@
 import { Navigate } from "react-router-dom"
 import { DashboardLayout } from "../layouts/dashboardLayout"
-import { Products } from "../pages/dashboard/productList/productList"
+import { ProductList } from "../pages/dashboard/productList/productList"
+import { ProductDetails } from "../pages/dashboard/product/product"
 import AuthWrapper from "../utils/AuthWrapper"
-import Product from "../pages/dashboard/product/product"
 
-export const dashboardRoutes = [
+export const privateRoutes = [
   { path: "/dashboard/", element: <Navigate to="/dashboard/product-list/" /> },
   {
     path: "/dashboard/product-list/",
     element: (
       <AuthWrapper>
         <DashboardLayout>
-          <Products />
+          <ProductList />
         </DashboardLayout>
       </AuthWrapper>
     ),
@@ -21,7 +21,7 @@ export const dashboardRoutes = [
     element: (
       <AuthWrapper>
         <DashboardLayout>
-          <Product />
+          <ProductDetails />
         </DashboardLayout>
       </AuthWrapper>
     ),

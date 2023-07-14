@@ -1,10 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import Navbar from "./components/navbar"
 import { AuthProvider } from "./contexts/AuthContext"
-import { dashboardRoutes } from "./routes/dashboard"
+import { privateRoutes } from "./routes/private"
 import { publicRoutes } from "./routes/public"
 
-const routePaths = [...dashboardRoutes, ...publicRoutes]
+const routePaths = [...privateRoutes, ...publicRoutes]
 
 function App() {
   return (

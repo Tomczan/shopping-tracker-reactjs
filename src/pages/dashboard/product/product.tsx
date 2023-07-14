@@ -16,21 +16,24 @@ export const ProductDetails = () => {
     return <div>Loading</div>
   }
 
-  if (data !== undefined) {
-    return (
-      <div>
-        {data.map((item) => (
-          <div
-            className="h-56 w-64 rounded-lg border bg-slate-400 p-8 shadow-sm"
-            key={item.id}
-          >
-            <span> Nazwa: {item.product.name}</span>
-            <br />
-            <span> Cena: {item.price}</span>
-            <p>{item.finished ? "Zamkniety" : "Otwarty"}</p>
-          </div>
-        ))}
-      </div>
-    )
+  if (data === undefined) {
+    // TODO: how to handle this
+    return <div>Data is undefinied</div>
   }
+
+  return (
+    <div>
+      {data.map((item) => (
+        <div
+          className="h-56 w-64 rounded-lg border bg-slate-400 p-8 shadow-sm"
+          key={item.id}
+        >
+          <span> Nazwa: {item.product.name}</span>
+          <br />
+          <span> Cena: {item.price}</span>
+          <p>{item.finished ? "Zamkniety" : "Otwarty"}</p>
+        </div>
+      ))}
+    </div>
+  )
 }
