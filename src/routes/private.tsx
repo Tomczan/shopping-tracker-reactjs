@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom"
 import { DashboardLayout } from "../layouts/dashboardLayout"
 import { ProductList } from "../pages/dashboard/productList/productList"
-import { ProductDetails } from "../pages/dashboard/product/product"
+import { ProductDetails } from "../pages/dashboard/productDetail/productDetail"
 import AuthWrapper from "../utils/AuthWrapper"
 
 export const privateRoutes = [
